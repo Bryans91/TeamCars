@@ -3,28 +3,33 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 
-static const float SCALE = 30.f;
+
+
+//static const float SCALE = 30.f;
 
 /** Create the base for the boxes to land */
-void CreateGround(b2World& World, float X, float Y);
+//void CreateGround(b2World& World, float X, float Y);
 
 /** Create the boxes */
-void CreateBox(b2World& World, int MouseX, int MouseY);
+//void CreateBox(b2World& World, int MouseX, int MouseY);
 
-void CreateCar(b2World& World, int X, int Y);
+//void CreateCar(b2World& World, int X, int Y);
 
 int main()
 {
-	/** Prepare the window */
+	/*
+
+
+	/** Prepare the window 
 	sf::RenderWindow Window(sf::VideoMode(800, 600, 32), "Test");
 	Window.setFramerateLimit(60);
 
-	/** Prepare the world */
+	/** Prepare the world /
 	b2Vec2 Gravity(0.f, 0.f);
 	b2World World(Gravity);
 	CreateGround(World, 400.f, 500.f);
 
-	/** Prepare textures */
+	/** Prepare textures /
 	sf::Texture GroundTexture;
 	sf::Texture BoxTexture;
 	GroundTexture.loadFromFile("ground.png");
@@ -97,10 +102,12 @@ int main()
 		}
 		Window.display();
 	}
+	*/
+	GameController c = new GameController();
 
 	return 0;
 }
-
+/*
 void CreateBox(b2World& World, int MouseX, int MouseY)
 {
 	b2BodyDef BodyDef;
@@ -134,4 +141,4 @@ void CreateGround(b2World& World, float X, float Y)
 
 void CreateCar(b2World& World, int X, int Y){
 
-}
+}*/
