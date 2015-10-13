@@ -1,69 +1,62 @@
 #include <iostream>
-
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
+#include "GameController.h"
 
-static const float SCALE = 30.f;
 
-class GameController{
+	GameController::GameController(){
+		view = new View();
+		level = new Level();
+		car = new Car(level->getWorld());
+		SCALE = 30.f;
 
-	View* view;
-	Car* car;
-	Level* level;
-
-	GameController(){
-		this->view = new View();
-		this->level = new Level();
-		this->car = new Car(this->level->getWorld());
-		gameLoop(this->level->getWorld(), this->view->getWindow(), this->car->getBody());
+		gameLoop(&level->getWorld(), view->getWindow(), car->getBody());
 
 
 	}
 
-	~GameController(){
-		//DESTRUCTOR	
-	}
 
-
-	void gameLoop(b2World World , sf::RenderWindow Window,b2Body* Body){
-		while (Window.isOpen())
+	void GameController::gameLoop(b2World* World, sf::RenderWindow* Window, b2Body* Body){
+		while (Window->isOpen())
 		{
+			
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 			{
-				this->car->torqueLeft();
+				std::cout << "test";
+				car->torqueLeft();
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			{
-				this->car->torqueRight();
+				car->torqueRight();
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			{
-				this->car->force();
+				car->force();
 			}
 
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				int MouseX = sf::Mouse::getPosition(Window).x;
-				int MouseY = sf::Mouse::getPosition(Window).y;
+				int MouseX = sf::Mouse::getPosition(*Window).x;
+				int MouseY = sf::Mouse::getPosition(*Window).y;
 
 				CreateBox(World, MouseX, MouseY);
 			}
 			
 
-			this->view->drawObjects(World,SCALE);
+			view->drawObjects(World,SCALE);
 		}
 	}
 
 
 
-	void CreateBox(b2World& World, int MouseX, int MouseY)
+	void GameController::CreateBox(b2World* World, int MouseX, int MouseY)
 	{
 		b2BodyDef BodyDef;
 		BodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
 		BodyDef.type = b2_dynamicBody;
-		b2Body* Body = World.CreateBody(&BodyDef);
+		b2Body* Body = World->CreateBody(&BodyDef);
 
 		b2PolygonShape Shape;
 		Shape.SetAsBox((50.f / 2) / SCALE, (32.f / 2) / SCALE);
@@ -73,5 +66,3 @@ class GameController{
 		FixtureDef.shape = &Shape;
 		Body->CreateFixture(&FixtureDef);
 	}
-
-};

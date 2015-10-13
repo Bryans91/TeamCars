@@ -1,19 +1,13 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
+#include "Level.h"
 
-class Level{
-
-	b2World* world ;
-
-	Level(){
+	Level::Level(){
 		b2Vec2 gravity(0.f, 0.f);
-		b2World world(gravity);
-		
+		world = new b2World(gravity);	
 	}
 
-	b2World* getWorld(){
-		return this->world;
+	b2World Level::getWorld(){
+		return *world;
 	}
 
-
-};
