@@ -11,7 +11,10 @@ void CreateGround(b2World& World, float X, float Y);
 /** Create the boxes */
 void CreateBox(b2World& World, int MouseX, int MouseY);
 
+void CreateBall(b2World& World, int MouseX, int MouseY);
+
 void CreateCar(b2World& World, int X, int Y);
+
 
 int main()
 {
@@ -26,9 +29,14 @@ int main()
 
 	/** Prepare textures */
 	sf::Texture GroundTexture;
+	sf::Texture BallTexture;
 	sf::Texture BoxTexture;
+	sf::Texture CarTexture;
 	GroundTexture.loadFromFile("ground.png");
 	BoxTexture.loadFromFile("box.png");
+	BallTexture.loadFromFile("Sprites/Ball/ball.png");
+	CarTexture.loadFromFile("Sprites/Car/land_dover_offender.png");
+
 
 
 	//movebox
@@ -38,25 +46,31 @@ int main()
 	b2Body* Body = World.CreateBody(&BodyDef);
 
 	b2PolygonShape Shape;
-	Shape.SetAsBox((40.f / 2) / SCALE, (32.f / 2) / SCALE);
+	Shape.SetAsBox((89/2)/SCALE, (217/2)/SCALE);
 	b2FixtureDef Car;
-	Car.density = 1.f;
-	Car.friction = 0.7f;
+	Car.density = 0.015f;
+	Car.friction = 1.f;
 	Car.shape = &Shape;
 	Body->CreateFixture(&Car);
+
+	
 
 	while (Window.isOpen())
 	{
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			Body->ApplyTorque(-1, true);
+			Body->ApplyTorque(-2, true);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			Body->ApplyTorque(1, true);
+			Body->ApplyTorque(2, true);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			Body->ApplyForce(Body->GetWorldVector(b2Vec2(0, -5)), Body->GetWorldCenter(), true);
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
 			Body->ApplyForce(Body->GetWorldVector(b2Vec2(0, 5)), Body->GetWorldCenter(), true);
 		}
@@ -67,7 +81,7 @@ int main()
 			int MouseX = sf::Mouse::getPosition(Window).x;
 			int MouseY = sf::Mouse::getPosition(Window).y;
 
-			CreateBox(World, MouseX, MouseY);
+			CreateBall(World, MouseX, MouseY);
 		}
 		World.Step(1 / 60.f, 8, 3);
 
@@ -78,8 +92,18 @@ int main()
 			if (BodyIterator->GetType() == b2_dynamicBody)
 			{
 				sf::Sprite Sprite;
-				Sprite.setTexture(BoxTexture);
-				Sprite.setOrigin(16.f, 16.f);
+				Sprite.setTexture(CarTexture);
+				Sprite.setOrigin(89/2, 217/2);
+				Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+				Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+				Window.draw(Sprite);
+				++BodyCount;
+			}
+			else if (BodyIterator->GetType() == b2_kinematicBody)
+			{
+				sf::Sprite Sprite;
+				Sprite.setTexture(BallTexture);
+				Sprite.setOrigin(32 / 2, 32 / 2);
 				Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
 				Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
 				Window.draw(Sprite);
@@ -103,9 +127,10 @@ int main()
 
 void CreateBox(b2World& World, int MouseX, int MouseY)
 {
+
 	b2BodyDef BodyDef;
 	BodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
-	BodyDef.type = b2_dynamicBody;
+	BodyDef.type = b2_kinematicBody;
 	b2Body* Body = World.CreateBody(&BodyDef);
 
 	b2PolygonShape Shape;
@@ -113,6 +138,24 @@ void CreateBox(b2World& World, int MouseX, int MouseY)
 	b2FixtureDef FixtureDef;
 	FixtureDef.density = 1.f;
 	FixtureDef.friction = 0.7f;
+	FixtureDef.shape = &Shape;
+	Body->CreateFixture(&FixtureDef);
+}
+
+void CreateBall(b2World& World, int MouseX, int MouseY)
+{
+	b2BodyDef BodyDef;
+	BodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
+	BodyDef.type = b2_kinematicBody;
+	BodyDef.linearDamping = 0.3;
+	b2Body* Body = World.CreateBody(&BodyDef);
+
+	b2CircleShape Shape;
+	Shape.m_p.Set(0, 0);
+	Shape.m_radius = 1;
+	b2FixtureDef FixtureDef;
+	FixtureDef.friction = 0.7f;
+	FixtureDef.density = 0.005f;
 	FixtureDef.shape = &Shape;
 	Body->CreateFixture(&FixtureDef);
 }
