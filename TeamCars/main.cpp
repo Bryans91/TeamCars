@@ -152,7 +152,7 @@ void CreateBall(b2World& World, int MouseX, int MouseY)
 
 	b2CircleShape Shape;
 	Shape.m_p.Set(0, 0);
-	Shape.m_radius = 1;
+	Shape.m_radius = 0.5;
 	b2FixtureDef FixtureDef;
 	FixtureDef.friction = 0.7f;
 	FixtureDef.density = 0.005f;
