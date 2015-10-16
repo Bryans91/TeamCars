@@ -52,22 +52,11 @@ int main()
 	GroundTexture.loadFromFile("ground.png");
 	BoxTexture.loadFromFile("box.png");
 	BallTexture.loadFromFile("Sprites/Ball/ball.png");
-	CarTexture.loadFromFile("Sprites/Car/bord_gt45.png");
+	CarTexture.loadFromFile("Sprites/Car/bord_gt45_small.png");
+
+	CreateCar(World, 600, 200);
 
 
-	//movebox
-	b2BodyDef BodyDef;
-	BodyDef.position = b2Vec2(600 / SCALE, 300 / SCALE);
-	BodyDef.type = b2_dynamicBody;
-	CarBody = World.CreateBody(&BodyDef);
-
-	b2PolygonShape Shape;
-	Shape.SetAsBox((106 / 2) / SCALE, (200 / 2) / SCALE);
-	b2FixtureDef Car;
-	Car.density = 0.02f;
-	Car.friction = 0.7f;
-	Car.shape = &Shape;
-	CarBody->CreateFixture(&Car);
 	sf::Event event;
 
 	while (Window.isOpen())
@@ -160,7 +149,7 @@ int main()
 			{
 				sf::Sprite Sprite;
 				Sprite.setTexture(CarTexture);
-				Sprite.setOrigin(89 / 2, 217 / 2);
+				Sprite.setOrigin(43 / 2, 80 / 2);
 				Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
 				Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
 				Window.draw(Sprite);
@@ -197,7 +186,7 @@ void CreateBall(b2World& World, int MouseX, int MouseY)
 	b2BodyDef BallBodyDef;
 	BallBodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
 	BallBodyDef.type = b2_dynamicBody;
-	//BallBodyDef.linearDamping = 0.3;
+	BallBodyDef.linearDamping = 0.3;
 	BallBody = World.CreateBody(&BallBodyDef);
 
 	b2CircleShape CircleShape;
@@ -220,7 +209,7 @@ void CreateGround(b2World& World, float X, float Y)
 	b2Body* Body = World.CreateBody(&BodyDef);
 
 	b2PolygonShape Shape;
-	Shape.SetAsBox((800.f / 2) / SCALE, (16.f / 2) / SCALE);
+	Shape.SetAsBox((1600.f / 2) / SCALE, (16.f / 2) / SCALE);
 	b2FixtureDef FixtureDef;
 	FixtureDef.density = 0.f;
 	FixtureDef.shape = &Shape;
@@ -239,7 +228,7 @@ b2Vec2 getLateralVelocity() {
 
 //tire class variables
 float m_maxForwardSpeed = 20;  // 100;
-float m_maxBackwardSpeed = -4; // -20;
+float m_maxBackwardSpeed = -5; // -20;
 float m_maxDriveForce = 30;    // 150;
 
 //tire class function
@@ -296,5 +285,17 @@ void updateFriction() {
 }
 
 void CreateCar(b2World& World, int X, int Y){
+	//movebox
+	b2BodyDef BodyDef;
+	BodyDef.position = b2Vec2(X / SCALE, Y / SCALE);
+	BodyDef.type = b2_dynamicBody;
+	CarBody = World.CreateBody(&BodyDef);
 
+	b2PolygonShape Shape;
+	Shape.SetAsBox((43 / 2) / SCALE, (80 / 2) / SCALE);
+	b2FixtureDef Car;
+	Car.density = 0.2f;
+	Car.friction = 0.7f;
+	Car.shape = &Shape;
+	CarBody->CreateFixture(&Car);
 }
