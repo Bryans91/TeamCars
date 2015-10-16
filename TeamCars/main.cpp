@@ -196,6 +196,7 @@ void CreateBall(b2World& World, int MouseX, int MouseY)
 	BallFixtureDef.friction = 1.f;
 	BallFixtureDef.density = 0.015f;
 	BallFixtureDef.shape = &CircleShape;
+	BallFixtureDef.restitution = 0.5f;
 	BallBody->CreateFixture(&BallFixtureDef);
 }
 
