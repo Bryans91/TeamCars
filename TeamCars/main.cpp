@@ -22,11 +22,11 @@ void CreateGround(b2World& World, float X, float Y);
 /* Create the boxes */
 void CreateBall(b2World& World, int MouseX, int MouseY);
 
-b2Vec2 getForwardVelocity();
-b2Vec2 getLateralVelocity();
-void updateDrive(int controlState);
-void updateTurn(int controlState);
-void updateFriction();
+//b2Vec2 getForwardVelocity();
+//b2Vec2 getLateralVelocity();
+//void updateDrive(int controlState);
+//void updateTurn(int controlState);
+//void updateFriction();
 
 
 void CreateCar(b2World& World, int X, int Y);
@@ -100,36 +100,10 @@ int main()
 				}
 			}
 		}
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		//{
-		//	m_controlState &= ~TDC_RIGHT;
-		//	m_controlState |= TDC_LEFT;
-		//	//Body->ApplyForce(b2Vec2(1, 0), Body->GetWorldPoint( b2Vec2(1, 1)), true);
-		//}
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		//{
-		//	m_controlState &= ~TDC_LEFT;
-		//	m_controlState |= TDC_RIGHT;
-		//	//Body->ApplyForce(b2Vec2(0, 1), Body->GetWorldPoint(b2Vec2(1, 1)), true);
-		//}
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		//{
-		//	m_controlState &= ~TDC_DOWN;
-		//	m_controlState |= TDC_UP;
-		//	//Body->ApplyForce(Body->GetWorldVector(b2Vec2(0, 5)), Body->GetWorldCenter(), true);
-		//}
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		//{
-		//	m_controlState &= ~TDC_UP;
-		//	m_controlState |= TDC_DOWN;
-		//	//Body->ApplyForce(Body->GetWorldVector(b2Vec2(0, 5)), Body->GetWorldCenter(), true);
-		//}
 
-		//if (m_controlState != 0){
-		updateFriction();
+		/*updateFriction();
 		updateDrive(m_controlState);
-		updateTurn(m_controlState);
-		//}
+		updateTurn(m_controlState);*/
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
@@ -186,7 +160,7 @@ void CreateBall(b2World& World, int MouseX, int MouseY)
 	b2BodyDef BallBodyDef;
 	BallBodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
 	BallBodyDef.type = b2_dynamicBody;
-	BallBodyDef.linearDamping = 0.3;
+	BallBodyDef.linearDamping = 0.3F;
 	BallBody = World.CreateBody(&BallBodyDef);
 
 	b2CircleShape CircleShape;
@@ -217,73 +191,7 @@ void CreateGround(b2World& World, float X, float Y)
 	Body->CreateFixture(&FixtureDef);
 }
 
-b2Vec2 getForwardVelocity() {
-	b2Vec2 currentForwardNormal = CarBody->GetWorldVector(b2Vec2(0, 1));
-	return b2Dot(currentForwardNormal, CarBody->GetLinearVelocity()) * currentForwardNormal;
-}
 
-b2Vec2 getLateralVelocity() {
-	b2Vec2 currentRightNormal = CarBody->GetWorldVector(b2Vec2(1, 0));
-	return b2Dot(currentRightNormal, CarBody->GetLinearVelocity()) * currentRightNormal;
-}
-
-//tire class variables
-float m_maxForwardSpeed = 20;  // 100;
-float m_maxBackwardSpeed = -5; // -20;
-float m_maxDriveForce = 30;    // 150;
-
-//tire class function
-void updateDrive(int controlState) {
-	//find desired speed
-	float desiredSpeed = 0;
-	switch (controlState & (TDC_UP | TDC_DOWN)) {
-	case TDC_UP:   desiredSpeed = m_maxForwardSpeed;  break;
-	case TDC_DOWN: desiredSpeed = m_maxBackwardSpeed; break;
-	default: return;//do nothing
-	}
-
-	//find current speed in forward direction
-	b2Vec2 currentForwardNormal = CarBody->GetWorldVector(b2Vec2(0, 1));
-	float currentSpeed = b2Dot(getForwardVelocity(), currentForwardNormal);
-
-	//apply necessary force
-	float force = 0;
-	if (desiredSpeed > currentSpeed)
-		force = m_maxDriveForce;
-	else if (desiredSpeed < currentSpeed)
-		force = -m_maxDriveForce;
-	else
-		return;
-	CarBody->ApplyForce(force * currentForwardNormal, CarBody->GetWorldCenter(), true);
-}
-
-void updateTurn(int controlState) {
-	float desiredTorque = 0;
-	switch (controlState & (TDC_LEFT | TDC_RIGHT)) {
-	case TDC_LEFT:  desiredTorque = 15;  break;
-	case TDC_RIGHT: desiredTorque = -15; break;
-	default:;//nothing
-	}
-	CarBody->ApplyTorque(desiredTorque, true);
-}
-
-void updateFriction() {
-	//lateral linear velocity
-	float maxLateralImpulse = 2.5f;
-	b2Vec2 impulse = CarBody->GetMass() * -getLateralVelocity();
-	if (impulse.Length() > maxLateralImpulse)
-		impulse *= maxLateralImpulse / impulse.Length();
-	CarBody->ApplyLinearImpulse(impulse, CarBody->GetWorldCenter(), true);
-
-	//angular velocity
-	CarBody->ApplyAngularImpulse(0.1f * CarBody->GetInertia() * -CarBody->GetAngularVelocity(), true);
-
-	//forward linear velocity
-	b2Vec2 currentForwardNormal = getForwardVelocity();
-	float currentForwardSpeed = currentForwardNormal.Normalize();
-	float dragForceMagnitude = -2 * currentForwardSpeed;
-	CarBody->ApplyForce(dragForceMagnitude * currentForwardNormal, CarBody->GetWorldCenter(), true);
-}
 
 void CreateCar(b2World& World, int X, int Y){
 	//movebox
