@@ -51,19 +51,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-<<<<<<< HEAD
-      <AdditionalIncludeDirectories>C:\Users\Joep\Source\Repos\TeamCars\externals\box2d;C:\Users\Joep\Source\Repos\TeamCars\externals\sfml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Joep\Source\Repos\TeamCars\externals\box2d\lib;C:\Users\Joep\Source\Repos\TeamCars\externals\sfml\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-=======
       <AdditionalIncludeDirectories>.\externals\box2d;.\externals\sfml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\externals\box2d\lib;.\externals\sfml\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
->>>>>>> 0be44ec0cb07b537923d2941166be8c1512aeb19
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

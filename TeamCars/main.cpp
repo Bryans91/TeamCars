@@ -3,6 +3,8 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 
+#include "Car.h"
+
 static const float SCALE = 30.f;
 
 enum {
@@ -12,7 +14,8 @@ enum {
 	TDC_DOWN = 0x8
 };
 
-b2Body* CarBody;
+Car* car;
+//b2Body* CarBody;
 b2Body* BallBody;
 int m_controlState;
 
@@ -54,8 +57,9 @@ int main()
 	BallTexture.loadFromFile("Sprites/Ball/ball.png");
 	CarTexture.loadFromFile("Sprites/Car/bord_gt45_small.png");
 
-	CreateCar(World, 600, 200);
-
+	car = new Car(&World);
+	//CreateCar(World, 600, 200);
+	
 
 	sf::Event event;
 
@@ -79,9 +83,9 @@ int main()
 				}
 			}
 
-			/*updateFriction();
-			updateDrive(m_controlState);
-			updateTurn(m_controlState);*/
+			/*car->updateFriction();
+			car->updateDrive(m_controlState);
+			car->updateTurn(m_controlState);*/
 
 			if (event.type == sf::Event::KeyReleased){
 				switch (event.key.code){
@@ -101,9 +105,9 @@ int main()
 			}
 		}
 
-		/*updateFriction();
-		updateDrive(m_controlState);
-		updateTurn(m_controlState);*/
+		car->updateFriction();
+		car->updateDrive(m_controlState);
+		car->updateTurn(m_controlState);
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
@@ -119,7 +123,7 @@ int main()
 		int BodyCount = 0;
 		for (b2Body* BodyIterator = World.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
 		{
-			if (BodyIterator == CarBody)
+			if (BodyIterator == car->getCarBody())
 			{
 				sf::Sprite Sprite;
 				Sprite.setTexture(CarTexture);
@@ -193,18 +197,18 @@ void CreateGround(b2World& World, float X, float Y)
 
 
 
-void CreateCar(b2World& World, int X, int Y){
-	//movebox
-	b2BodyDef BodyDef;
-	BodyDef.position = b2Vec2(X / SCALE, Y / SCALE);
-	BodyDef.type = b2_dynamicBody;
-	CarBody = World.CreateBody(&BodyDef);
-
-	b2PolygonShape Shape;
-	Shape.SetAsBox((43 / 2) / SCALE, (80 / 2) / SCALE);
-	b2FixtureDef Car;
-	Car.density = 0.2f;
-	Car.friction = 0.7f;
-	Car.shape = &Shape;
-	CarBody->CreateFixture(&Car);
-}
+//void CreateCar(b2World& World, int X, int Y){
+//	//movebox
+//	b2BodyDef BodyDef;
+//	BodyDef.position = b2Vec2(X / SCALE, Y / SCALE);
+//	BodyDef.type = b2_dynamicBody;
+//	CarBody = World.CreateBody(&BodyDef);
+//
+//	b2PolygonShape Shape;
+//	Shape.SetAsBox((43 / 2) / SCALE, (80 / 2) / SCALE);
+//	b2FixtureDef Car;
+//	Car.density = 0.2f;
+//	Car.friction = 0.7f;
+//	Car.shape = &Shape;
+//	CarBody->CreateFixture(&Car);
+//}

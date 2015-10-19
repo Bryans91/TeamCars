@@ -2,22 +2,39 @@
 
 Car::Car(b2World* world) {
 	//create car body
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	CarBody = world->CreateBody(&bodyDef);
+	//b2BodyDef bodyDef;
+	//bodyDef.type = b2_dynamicBody;
+	//CarBody = world->CreateBody(&bodyDef);
 
-	b2Vec2 vertices[8];
-	vertices[0].Set(1.5, 0);
-	vertices[1].Set(3, 2.5);
-	vertices[2].Set(2.8, 5.5);
-	vertices[3].Set(1, 10);
-	vertices[4].Set(-1, 10);
-	vertices[5].Set(-2.8, 5.5);
-	vertices[6].Set(-3, 2.5);
-	vertices[7].Set(-1.5, 0);
-	b2PolygonShape polygonShape;
-	polygonShape.Set(vertices, 8);
-	b2Fixture* fixture = CarBody->CreateFixture(&polygonShape, 0.1f);//shape, density
+	//b2Vec2 vertices[8];
+	//vertices[0].Set(1.5, 0);
+	//vertices[1].Set(3, 2.5);
+	//vertices[2].Set(2.8, 5.5);
+	//vertices[3].Set(1, 10);
+	//vertices[4].Set(-1, 10);
+	//vertices[5].Set(-2.8, 5.5);
+	//vertices[6].Set(-3, 2.5);
+	//vertices[7].Set(-1.5, 0);
+	//b2PolygonShape polygonShape;
+	//polygonShape.Set(vertices, 8);
+	//b2Fixture* fixture = CarBody->CreateFixture(&polygonShape, 0.1f);//shape, density
+
+	b2BodyDef BodyDef;
+	BodyDef.position = b2Vec2(600 / 30.0F, 200 / 30.0F);
+	BodyDef.type = b2_dynamicBody;
+	CarBody = world->CreateBody(&BodyDef);
+
+	b2PolygonShape Shape;
+	Shape.SetAsBox((43 / 2) / 30.0F, (80 / 2) / 30.0F);
+	b2FixtureDef Car;
+	Car.density = 0.2f;
+	Car.friction = 0.7f;
+	Car.shape = &Shape;
+	CarBody->CreateFixture(&Car);
+}
+
+b2Body* Car::getCarBody(){
+	return CarBody;
 }
 
 b2Vec2 Car::getForwardVelocity() {

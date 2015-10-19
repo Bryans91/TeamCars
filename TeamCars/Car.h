@@ -15,6 +15,7 @@ public:
 	Car(b2World* world);
 	b2Vec2 getForwardVelocity();
 	b2Vec2 getLateralVelocity();
+	b2Body* getCarBody();
 	void updateDrive(int controlState);
 	void updateTurn(int controlState);
 	void updateFriction();
