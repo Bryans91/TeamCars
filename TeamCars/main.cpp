@@ -25,15 +25,6 @@ void CreateGround(b2World& World, float X, float Y);
 /* Create the boxes */
 void CreateBall(b2World& World, int MouseX, int MouseY);
 
-//b2Vec2 getForwardVelocity();
-//b2Vec2 getLateralVelocity();
-//void updateDrive(int controlState);
-//void updateTurn(int controlState);
-//void updateFriction();
-
-
-void CreateCar(b2World& World, int X, int Y);
-
 int main()
 {
 	m_controlState = 0;
